@@ -3,8 +3,6 @@
 // Any image on feed: <img alt="Image" draggable="true" src="https://pbs.twimg.com/media/FOhlsXWUYAAyRBc?format=jpg&name=small" class="css-9pa8cd">
 //-------------------------------------------------------------------------------------------------------------------------------------//
 
-
-
 // layersNode is the div with id of "layers", which contains all the popups (good and bad ones).
 let layersNode;
 
@@ -23,10 +21,10 @@ const htmlObserver = new MutationObserver(() => {
 // A new child gets added when a popup appears (good or bad).
 const layersObserver = new MutationObserver((mutation) => {
 
-  // Happens after a 1ms delay so that it doesn't happen-
+  // Happens after a 10ms delay so that it doesn't happen-
   // before nextLayerChildImmune is updated in the window "click" EventListener.
   setTimeout(() => {
-    if(nextLayerChildImmune) {
+    if (nextLayerChildImmune) {
       nextLayerChildImmune = false;
  
       // The added child gets a "data-immune" attribute. This is later used in-
@@ -35,7 +33,7 @@ const layersObserver = new MutationObserver((mutation) => {
     }
    
     dontDisplayBadChildren();
-  }, 1);
+  }, 10);
 });
 
 // Gets called when "layers" div gets new child
@@ -46,20 +44,21 @@ function dontDisplayBadChildren () {
 
   // Bottom popup class: css-1dbjc4n r-aqfbo4 r-1p0dtai r-1d2f490 r-12vffkv r-1xcajam r-zchlnj-
   // containts both the "log in/sign up" prompt and the "Enable cookies" prompt.
-  const badChildClasses = ["css-1dbjc4n r-aqfbo4 r-1d2f490 r-12vffkv r-1xcajam r-zchlnj r-ipm5af",
-  "css-1dbjc4n r-aqfbo4 r-1p0dtai r-1d2f490 r-12vffkv r-1xcajam r-zchlnj"];
+  const badChildClasses = [
+      "css-1dbjc4n r-aqfbo4 r-1d2f490 r-12vffkv r-1xcajam r-zchlnj r-ipm5af",
+      "css-1dbjc4n r-aqfbo4 r-1p0dtai r-1d2f490 r-12vffkv r-1xcajam r-zchlnj",
+  ];
 
   // Changes <html> overflow and scrollBehaviour back to enable scrolling
   target.style.overscrollBehaviorY = "auto";
   target.style.overflow = "visible";
 
-  for(child of layersNode.childNodes) {
+  for (child of layersNode.childNodes) {
     // If a child has the "data-immune" attribute, skip it
-    if(child.getAttribute("data-immune") === "true") continue;
+    if (child.getAttribute("data-immune") === "true") continue;
 
-    for(badClass of badChildClasses) {
-      if(child.className = badClass)
-      {
+    for (badClass of badChildClasses) {
+      if (child.className === badClass) {
         child.style.display = "none";
       }
     }
@@ -67,12 +66,12 @@ function dontDisplayBadChildren () {
 }
 
 // Is called when the script loads and looks for the "layers" div.
-function lookForLayersNode() {
+function lookForLayersNode(handle) {
 
   // Checks if "layers" div exists every 100ms.
   // This is done because the element might not exist when script loads.
   layersNode = document.getElementById("layers");
-  if(!layersNode) {
+  if (!layersNode) {
     setTimeout(lookForLayersNode, 100);
   }
  
@@ -93,12 +92,12 @@ window.addEventListener("click", (e) => {
   let element = e.target;
   
   // Profile picture check - only the profile picture has these classes
-  if(element.className == "css-1dbjc4n r-i49rur r-172uzmj r-1pi2tsx r-1ny4l3l r-o7ynqc r-6416eg r-13qz1uu") {
+  if (element.className === "css-1dbjc4n r-i49rur r-172uzmj r-1pi2tsx r-1ny4l3l r-o7ynqc r-6416eg r-13qz1uu") {
     nextLayerChildImmune = true;
   }
 
   // Check for any image in the feed - they all have the "css-9pa8cd" class
-  else if(element.tagName == "IMG" && element.className == "css-9pa8cd") {
+  else if (element.tagName === "IMG" && element.className === "css-9pa8cd") {
     nextLayerChildImmune = true;
   }
 

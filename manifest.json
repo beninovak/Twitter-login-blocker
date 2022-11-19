@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Remove twitter login blocker",
-    "version": "1.0",
+    "version": "1.1",
     "description": "Removes the annoying Twitter log in/sign up blocker, which prevents the use of Twitter without an account.",
     "icons": {
         "16": "icon-small.png",
